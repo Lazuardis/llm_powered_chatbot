@@ -310,7 +310,7 @@ with st.sidebar:
 
     st.divider()
     st.header("Business scale")
-    users = st.slider("Users", 1, 100_000, 1_000, step=100)
+    users = st.slider("Users", 0, 100_000, 1_000, step=100)
     messages_per_user = st.slider("Messages per user per day", 1, 100, 10)
     days_per_month = st.slider("Days per month", 1, 31, 30)
 
