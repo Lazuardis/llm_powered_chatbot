@@ -31,6 +31,16 @@ GEMINI_API_KEY=your_real_key
 
 Keep `.env` private. Do not commit real API keys to GitHub; `.env.example` should contain placeholders only.
 
+## Deploy on Streamlit Community Cloud
+
+Do not upload `.env` to GitHub. In your Streamlit app settings, add this in the **Secrets** field:
+
+```toml
+GEMINI_API_KEY = "your_real_key"
+```
+
+The app reads `GEMINI_API_KEY` from local environment variables first, then from Streamlit secrets.
+
 ## Run
 
 ```powershell

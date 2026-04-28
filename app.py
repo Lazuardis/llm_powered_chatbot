@@ -137,8 +137,24 @@ def calculate_cost(tokens: int, price_per_million: float) -> float:
     return tokens / 1_000_000 * price_per_million
 
 
+def get_secret(name: str) -> str | None:
+    """Read local env vars first, then Streamlit Community Cloud secrets."""
+    value = os.getenv(name)
+    if value:
+        return value.strip()
+
+    try:
+        value = st.secrets.get(name)
+    except (FileNotFoundError, KeyError):
+        return None
+
+    if value:
+        return str(value).strip()
+    return None
+
+
 def get_client():
-    api_key = os.getenv("GEMINI_API_KEY")
+    api_key = get_secret("GEMINI_API_KEY")
     if not api_key or genai is None:
         return None
     return genai.Client(api_key=api_key)
@@ -227,7 +243,10 @@ package_ready = genai is not None
 if not package_ready:
     st.warning("The Google GenAI package is not installed yet. Install dependencies with `pip install -r requirements.txt`.")
 elif not api_ready:
-    st.info("Demo mode: add `GEMINI_API_KEY` to a `.env` file to run real Gemini API calls.")
+    st.info(
+        "Demo mode: add `GEMINI_API_KEY` to a local `.env` file or to Streamlit "
+        "Community Cloud secrets to run real Gemini API calls."
+    )
 
 st.subheader("Model Selection")
 model_dropdown_options = []
